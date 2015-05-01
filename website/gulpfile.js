@@ -59,8 +59,8 @@ gulp.task('deploy', ['git-clone'], function(cb) {
         gutil.log('copying files...');
         gulp.src(paths.harp.output + '/**')
             .pipe(gulp.dest(paths.repo))
-            .pipe(git.add({args: '-A', cwd: paths.repo}));
-        //git.commit();
+            .pipe(git.add({args: '-A', cwd: paths.repo}))
+            .pipe(git.commit('Updated website.', {cwd: paths.repo}));
         //git.push();
         gutil.log('done');
         cb();
