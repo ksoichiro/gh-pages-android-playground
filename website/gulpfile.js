@@ -23,11 +23,13 @@ gulp.task('clean', function(cb) {
     del([paths.dest.root, paths.dest.lib, paths.repo], cb);
 });
 
-gulp.task('build', ['copy'], function() {
+gulp.task('build', ['copy'], function(cb) {
     harp.compile(paths.harp.project, paths.harp.output, function(err) {
         if (err) {
             gutil.log('build failed: ' + err);
         }
+        gutil.log('Compile done');
+        cb();
     });
 });
 
@@ -37,17 +39,28 @@ gulp.task('copy', function() {
         .pipe(gulp.dest(paths.dest.lib));
 });
 
-gulp.task('deploy', function(cb) {
+gulp.task('remove-repo', ['build'], function(cb) {
     // Remove old directory, if exists.
+    gutil.log('removing repo..');
     del([paths.repo], cb);
+});
+
+gulp.task('git-clone', ['remove-repo'], function(cb) {
     // Clone to build directory, commit files to gh-pages branch, and push it.
-    git.clone('https://github.com/ksoichiro/gh-pages-android-playground.git', {args: paths.repo}, function(err) {});
+    git.clone('https://github.com/ksoichiro/gh-pages-android-playground.git', {args: paths.repo}, function(err) {
+        gutil.log('clone done');
+        cb();
+    });
+});
+
+gulp.task('deploy', ['git-clone'], function(cb) {
     //git.checkout();
-    //gulp.src(paths.harp.output)
-    //    .pipe(gulp.dest(paths.repo);
+    gulp.src(paths.harp.output)
+        .pipe(gulp.dest(paths.repo));
     //git.add();
     //git.commit();
     //git.push();
+    cb();
 });
 
 gulp.task('start', ['build'], function() {
