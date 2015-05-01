@@ -54,13 +54,17 @@ gulp.task('git-clone', ['remove-repo'], function(cb) {
 });
 
 gulp.task('deploy', ['git-clone'], function(cb) {
-    //git.checkout();
-    gulp.src(paths.harp.output)
-        .pipe(gulp.dest(paths.repo));
-    //git.add();
-    //git.commit();
-    //git.push();
-    cb();
+    gutil.log('check out gh-pages...');
+    git.checkout('gh-pages', {args: '-b', cwd: paths.repo}, function(err) {
+        gutil.log('copying files...');
+        gulp.src(paths.harp.output + '/**')
+            .pipe(gulp.dest(paths.repo))
+            .pipe(git.add({args: '-A', cwd: paths.repo}));
+        //git.commit();
+        //git.push();
+        gutil.log('done');
+        cb();
+    });
 });
 
 gulp.task('start', ['build'], function() {
