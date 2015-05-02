@@ -9,7 +9,7 @@ if [ "$TEST_TARGET" = "android" ]; then
   # This should be replaced to "./gradlew assmble" or something like that
   echo "Building..."
 elif [ "$TEST_TARGET" = "website" ]; then
-  if [ "$TRAVIS_PULL_REQUEST" != "false" ] && [ "$TRAVIS_BRANCH" = "master" ] && [ ! -z "$GH_TOKEN" ]; then
+  if [ "$TRAVIS_PULL_REQUEST" = "false" ] && [ "$TRAVIS_BRANCH" = "master" ] && [ ! -z "$GH_TOKEN" ]; then
     echo "Update website..."
     pushd website > /dev/null 2>&1
     npm run deploy
