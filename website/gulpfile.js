@@ -74,9 +74,13 @@ gulp.task('deploy', ['git-clone'], function(cb) {
                 .pipe(gulp.dest(paths.repo))
                 .pipe(git.add({args: '-A', cwd: paths.repo}))
                 .pipe(git.commit('Updated website.', {cwd: paths.repo}));
-            git.push('origin', 'gh-pages', function(err) {
+            git.push('origin', 'gh-pages', {cwd: paths.repo}, function(err) {
+                if (err) {
+                    gutil.log('Failed to push: ' + err);
+                } else {
+                    gutil.log('Pushed successfully.');
+                }
                 cb();
-                gutil.log('done');
             });
         }
     });
