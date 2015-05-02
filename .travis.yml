@@ -13,10 +13,6 @@ cache:
   directories:
   - website/node_modules
   - website/bower_components
-  - $HOME/.gradle/caches
-  - $HOME/.gradle/wrapper/dists
-before_cache:
-  - for i in $(find $HOME/.gradle/caches -name "*.lock"); do rm -f ${i}; done
 install:
 - true && ([ "$TEST_TARGET" != "website" ] || (cd website && npm install && cd ..))
 - true && ([ "$TEST_TARGET" != "android" ] || android-update-sdk --components=build-tools-22.0.1 --accept-licenses='android-sdk-license-.+')
