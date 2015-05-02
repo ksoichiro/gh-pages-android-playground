@@ -1,5 +1,7 @@
 # gh-pages-android-playground
 
+[![Build Status](https://travis-ci.org/ksoichiro/gh-pages-android-playground.svg?branch=master)](https://travis-ci.org/ksoichiro/gh-pages-android-playground)
+
 Test project to publish documentation website via Travis CI with Android  environment.
 
 ## Setup
