@@ -13,13 +13,14 @@ var project = {
     name: 'gh-pages-android-playground',
 };
 
-var gitBaseUrl = 'github.com/' + project.githubRepoOwner + '/' + project.name + '.git';
 if (process.env.GH_TOKEN) {
     // Travis CI
+    var gitBaseUrl = 'github.com/' + project.githubRepoOwner + '/' + project.name + '.git';
     project['gitUrl'] = 'https://' + gitBaseUrl;
     project['gitPushUrl'] = 'https://' + ghToken + '@' + gitBaseUrl;
 } else {
     // Local
+    var gitBaseUrl = 'github.com:' + project.githubRepoOwner + '/' + project.name + '.git';
     project['gitUrl'] = 'git@' + gitBaseUrl;
     project['gitPushUrl'] = project['gitUrl'];
 }
@@ -71,7 +72,11 @@ gulp.task('remove-repo', ['build'], function(cb) {
 gulp.task('git-clone', ['remove-repo'], function(cb) {
     // Clone to build directory, commit files to gh-pages branch, and push it.
     git.clone(project.gitUrl, {args: paths.repo}, function(err) {
-        gutil.log('clone done');
+        if (err) {
+            gutil.log('Failed to clone: ' + err);
+        } else {
+            gutil.log('clone done');
+        }
         cb();
     });
 });
