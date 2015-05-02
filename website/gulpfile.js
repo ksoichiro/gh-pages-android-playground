@@ -5,10 +5,13 @@ var harp = require('harp');
 var del = require('del');
 var gutil = require('gulp-util');
 
+var ghToken = process.env.GH_TOKEN;
+
 // You should replace this configs to your project's values.
 var project = {
     name: 'gh-pages-android-playground',
-    gitUrl: 'https://github.com/ksoichiro/gh-pages-android-playground.git'
+    gitUrl: 'https://github.com/ksoichiro/gh-pages-android-playground.git',
+    gitPushUrl: 'https://' + ghToken + '@github.com/ksoichiro/gh-pages-android-playground.git'
 };
 
 var paths = {
@@ -74,7 +77,7 @@ gulp.task('deploy', ['git-clone'], function(cb) {
                 .pipe(gulp.dest(paths.repo))
                 .pipe(git.add({args: '-A', cwd: paths.repo}))
                 .pipe(git.commit('Updated website.', {cwd: paths.repo}));
-            git.push('origin', 'gh-pages', {cwd: paths.repo}, function(err) {
+            git.push(project.gitPushUrl, 'gh-pages', {args: '--quiet', cwd: paths.repo}, function(err) {
                 if (err) {
                     gutil.log('Failed to push: ' + err);
                 } else {

@@ -14,4 +14,4 @@ script:
   echo "Building..."
   cd website
   # TODO Avoid building on pull requests
-  npm run deploy
+  '[ $GH_TOKEN ] && npm run deploy'
