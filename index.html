@@ -7,6 +7,8 @@
     <title>gh-pages-android-playground</title>
     <link rel="stylesheet" type="text/css" href="/gh-pages-android-playground/lib/components-font-awesome/css/font-awesome.min.css" />
     <link rel="stylesheet" type="text/css" href="/gh-pages-android-playground/lib/bootstrap/dist/css/bootstrap.min.css" />
+    <link rel="stylesheet" type="text/css" href="/gh-pages-android-playground/lib/highlightjs/styles/default.css" />
+    <link rel="stylesheet" type="text/css" href="/gh-pages-android-playground/css/main.css" />
 </head>
 <body>
 
@@ -32,16 +34,148 @@
 </nav>
 
 <div class="container">
-<h1>gh-pages-android-playground</h1>
+<div class="row">
+<div class="col-xs-6 col-sm-3">
+    <div class="list-group">
+        
+            <a href="#" class="list-group-item">Section 1</a>
+        
+            <a href="#" class="list-group-item">Section 2</a>
+        
+            <a href="#" class="list-group-item">Section 3</a>
+        
+    </div>
+</div>
+<div class="col-xs-12 col-sm-9">
+<h1>gh-pages-android-playground</h1><p><a href="https://travis-ci.org/ksoichiro/gh-pages-android-playground"><img src="https://travis-ci.org/ksoichiro/gh-pages-android-playground.svg?branch=master" alt="Build Status"></a></p>
+<p>Test project to publish documentation website using GitHub Pages via Travis CI with Android environment.</p>
+<h2>TL;DR</h2><ul>
+<li>This projects provides some scripts to automate publishing project website on GitHub Pages.</li>
+<li>You can edit Markdown for documentation in <code>master</code> branch as usual.</li>
+<li>When you push it to GitHub, and after few minutes, the website will be updated!</li>
+<li>You don&#39;t have to care about syncing <code>master</code> and <code>gh-pages</code> branches.</li>
+</ul>
+<h2>Why?</h2><p>Usually we use <code>gh-pages</code> branch or Wiki to manage project documentation website on GitHub.</p>
+<p>However, I wanted to manage them in master branch because:</p>
+<ul>
+<li>changing branch to edit documents is not so easy for those who are not familiar with git.<br>I&#39;d like to get helps or pull requests from people who are interested in the project.</li>
+<li>documentations will be written in Markdown and they are not so big, so cloning them together is not bad. (It&#39;s rather useful to confirm documents locally.)</li>
+</ul>
+<p>Also, I didn&#39;t want to manage them manually (building files, committing them to <code>gh-pages</code> branch, ...), so I automate the entire process.</p>
+<p>I was going to introduce them to Android projects, but maybe this can be applied to other types of projects.</p>
+<h2>Tools and services</h2><p>This project uses these awesome tools and services to manage contents.</p>
+<ul>
+<li><a href="https://travis-ci.org">Travis CI</a></li>
+<li><a href="https://www.npmjs.com/">npm</a></li>
+<li><a href="http://gulpjs.com/">gulp.js</a></li>
+<li><a href="http://harpjs.com">harp</a></li>
+<li><a href="http://bower.io/">bower</a></li>
+</ul>
+<h2>Directory structure</h2><pre><code>projectRoot
+├── app // Android app
+├── docs // Documents to be published
+├── gradle      // Gradle wrapper files
+├── gradlew     // Gradle wrapper files
+├── gradlew.bat // Gradle wrapper files
+└── website // Scripts to publish website
+    ├── .bowerrc // bower settings
+    ├── bower.json // bower settings
+    ├── bower_components // bower modules
+    ├── gulpfile.js // gulp settings
+    ├── harp.json // harp settings
+    ├── node_modules // npm modules
+    ├── package.json // npm settings
+    ├── public // Files for website (.ejs, .jade, etc.)
+    │   └── lib // Copied bower files to be published
+    ├── repo // Another git repo to commit to gh-pages
+    └── www // Files compiled by harp
+</code></pre><h2>Setup</h2><p>This project is just a showcase project for managing static contents in GitHub repo (especially using master branch), so you should configure some parts of the project to manage your own project.</p>
+<h4>Get API token from GitHub</h4><p>Go to <a href="https://github.com/settings/tokens">Personal access tokens</a> page,
+click <code>Generate new token</code> and generate it.</p>
+<p>Then encrypt it using travis command.</p>
+<pre><code class="language-sh">$ gem install travis
+$ travis encrypt -r ksoichiro/gh-pages-android-playground GH_TOKEN=&quot;****************************************&quot; --add
+</code></pre>
+<p>The result will be added to <code>.travis.yml</code>.</p>
+<h4>Create an empty branch gh-pages</h4><p>At first, create <code>gh-pages</code> and push it to your repo.</p>
+<pre><code>git checkout --orphan gh-pages
+</code></pre><p><code>gh-pages</code> branch must be pushed to GitHub before building on Travis CI.</p>
+<h4>Enable Travis CI build</h4><p>Go to account settings on Travis CI site, and enable builds for the project.</p>
+<h4>Install npm</h4><p><code>npm</code> is required to execute build commands.<br>If you don&#39;t have <code>npm</code> in your environment, nvm (or nvm-windows) will be good.</p>
+<h4>Configure files</h4><p>You must configure these files.</p>
+<h5>.travis.yml</h5><pre><code class="language-yaml">env:
+  global:
+  - GIT_COMMITTER_NAME=ksoichiro
+  - GIT_COMMITTER_EMAIL=soichiro.kashima@gmail.com
+  - GIT_AUTHOR_NAME=ksoichiro
+  - GIT_AUTHOR_EMAIL=soichiro.kashima@gmail.com
+  - secure: Tszvcrpj37Y2/iLG2ke42Zl/lOzwi21IfRafmnyoAqSWycwuEwFzp4wjHNUZEEVVdiAU5my2CfVhcPakF3bdcFt9Dg1lUP8SSuMgrUurGD95wfJ2ORNU1B+3GElKItO8yKjG1eruDNzgOCwX1VocSnCXZbHeg3p1mhE5UEIht+w=
+</code></pre>
+<p><code>env.global.secure</code> is the result of <code>travis encrypt</code>.</p>
+<h5>website/gulpfile.js</h5><pre><code class="language-javascript">var project = {
+    githubRepoOwner: &#39;ksoichiro&#39;,
+    name: &#39;gh-pages-android-playground&#39;,
+};
+</code></pre>
+<p>These values define the Git repository URLs.</p>
+<h5>website/package.json</h5><pre><code class="language-json">{
+  &quot;name&quot;: &quot;gh-pages-android-test&quot;,
+  &quot;description&quot;: &quot;Web site for Android projects on GitHub&quot;,
+  &quot;repository&quot;: {
+    &quot;type&quot;: &quot;git&quot;,
+    &quot;url&quot;: &quot;https://github.com/ksoichiro/gh-pages-android-playground.git&quot;
+  },
+</code></pre>
+<h5>website/bower.json</h5><pre><code class="language-json">{
+  &quot;name&quot;: &quot;gh-pages-android-test&quot;,
+  &quot;description&quot;: &quot;bower components for gh-pages-android-test&quot;,
+</code></pre>
+<p>Just replace text to match your project.</p>
+<h5>website/harp.json</h5><pre><code class="language-json">{
+  &quot;globals&quot;: {
+    &quot;baseUrl&quot;: &quot;$BASE_URL&quot;,
+    &quot;title&quot;: &quot;gh-pages-android-playground&quot;
+  }
+}
+</code></pre>
+<p>Just replace <code>globals.title</code> to match your project.<br><code>globals.baseUrl</code> is used to construct proper URLs in HTML for local or production.</p>
+<h2>Build and deploy</h2><h3>Install npm dependencies</h3><p>Every operations to manage website in local environment are executed in <code>website</code> directory.
+At first, you should move to the directory and install the dependencies.</p>
+<pre><code class="language-sh">cd website
+npm install
+</code></pre>
+<h3>Start a server</h3><p>Then start a web server.</p>
+<pre><code class="language-sh">npm start
+</code></pre>
+<p><code>http://localhost:9000/</code> will be used.</p>
+<h3>Edit files</h3><p>After launching a server, you can edit files such as<br><code>&lt;projectRoot&gt;/docs/*.md</code>,<br><code>&lt;projectRoot&gt;/website/public/*.ejs</code>, and so on.<br>You can confirm the result by reloading the browser.</p>
+<p>If they&#39;re OK, commit the edited files.</p>
+<h3>Deploy</h3><p>You can deploy the contents manually or Travis CI builds.</p>
+<h4>Deploy manually</h4><p>Run the following command in <code>website</code> directory.</p>
+<pre><code>npm run clean &amp;&amp; npm run deploy
+</code></pre><p>This command will build static files and automatically commit and push the changes to the <code>gh-pages</code> branch of GitHub repository.</p>
+<h4>Deploy using Travis CI</h4><p>Just push the master branch to GitHub.<br>Static contents are built on Travis CI, and the changes will be committed and pushed to the <code>gh-pages</code> branch of GitHub repository.</p>
+<h2>License</h2><pre><code>Copyright 2015 Soichiro Kashima
 
-<p>This is a test site for trying to publish static contents from Travis CI.</p>
+Licensed under the Apache License, Version 2.0 (the &quot;License&quot;);
+you may not use this file except in compliance with the License.
+You may obtain a copy of the License at
 
-<p><a href="https://github.com/ksoichiro/gh-pages-android-playground">GitHub repository</a></p>
+    http://www.apache.org/licenses/LICENSE-2.0
 
-<h1>Documentation index</h1><p>Can you see me?<br>This document is <code>docs/index.md</code>.</p>
+Unless required by applicable law or agreed to in writing, software
+distributed under the License is distributed on an &quot;AS IS&quot; BASIS,
+WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+See the License for the specific language governing permissions and
+limitations under the License.
+</code></pre>
+</div>
+</div>
 </div>
 
 <script src="/gh-pages-android-playground/lib/jquery/dist/jquery.min.js"></script>
 <script src="/gh-pages-android-playground/lib/bootstrap/dist/js/bootstrap.min.js"></script>
+<script src="/gh-pages-android-playground/lib/highlightjs/highlight.pack.js"></script>
+<script>hljs.initHighlightingOnLoad();</script>
 </body>
 </html>
