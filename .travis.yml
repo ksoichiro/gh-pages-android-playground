@@ -15,6 +15,6 @@ cache:
   - website/bower_components
 install:
 # `true` is required to avoid lint error
-- true && [ "$TEST_TARGET" == "website" ] && cd website && npm install && cd ..
+- true && ([ "$TEST_TARGET" != "website" ] || (cd website && npm install && cd ..))
 script:
 - /bin/bash .travis-script.sh
