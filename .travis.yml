@@ -11,7 +11,7 @@ install:
 script:
 - |
   # This should be replaced to "./gradlew assmble" or something like that
-  echo "Building..."
+  echo "Building at `pwd`..."
   cd website
   # TODO Avoid building on pull requests
-  '[ $GH_TOKEN ] && npm run deploy'
+  [ $GH_TOKEN ] && npm run deploy
