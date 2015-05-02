@@ -14,6 +14,7 @@ cache:
   - website/node_modules
   - website/bower_components
   - $HOME/.gradle/caches
+  - $HOME/.gradle/wrapper/dists
 android:
   components:
     - build-tools-22.0.1
