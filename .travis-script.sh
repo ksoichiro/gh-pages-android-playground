@@ -3,7 +3,6 @@
 echo "TEST_TARGET=${TEST_TARGET}"
 echo "TRAVIS_PULL_REQUEST=${TRAVIS_PULL_REQUEST}"
 echo "TRAVIS_BRANCH=${TRAVIS_BRANCH}"
-echo "GH_TOKEN=${GH_TOKEN}"
 
 if [ "$TEST_TARGET" = "android" ]; then
   # This should be replaced to "./gradlew assmble" or something like that

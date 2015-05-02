@@ -5,7 +5,7 @@ env:
   - GIT_COMMITTER_EMAIL=soichiro.kashima@gmail.com
   - GIT_AUTHOR_NAME=ksoichiro
   - GIT_AUTHOR_EMAIL=soichiro.kashima@gmail.com
-  - secure: Tszvcrpj37Y2/iLG2ke42Zl/lOzwi21IfRafmnyoAqSWycwuEwFzp4wjHNUZEEVVdiAU5my2CfVhcPakF3bdcFt9Dg1lUP8SSuMgrUurGD95wfJ2ORNU1B+3GElKItO8yKjG1eruDNzgOCwX1VocSnCXZbHeg3p1mhE5UEIht+w=
+  - secure: JvSTH/5Jl7x3IwCvErTKoW6AjGr03MLwmJwiRQ8sDeEITeLS45EJCnpzvOZXIaxY98Uhl9WqYLYCkUWPkM6yqFEsKUEXKYFLkDoec3ek8GKUkiGWSsV5jCEkVBx8RqLWGbpSg7U/0Ua2doZqIYkBEJ1t5wKiANrt+q/04+jpXWs=
   matrix:
   - TEST_TARGET=android
   - TEST_TARGET=website
@@ -14,7 +14,6 @@ cache:
   - website/node_modules
   - website/bower_components
 install:
-# `true` is required to avoid lint error
 - true && ([ "$TEST_TARGET" != "website" ] || (cd website && npm install && cd ..))
 script:
-- /bin/bash .travis-script.sh
+- "/bin/bash .travis-script.sh"
