@@ -5,6 +5,7 @@
     "jquery": "1.11.2",
     "bootstrap": "3.3.4",
     "components-font-awesome": "4.3.0",
+    "highlightjs": "8.5.0",
     "respond-minmax": "1.4.2",
     "html5shiv": "3.7.2"
   },
@@ -17,6 +18,9 @@
     },
     "components-font-awesome": {
       "main": ["css/*.min.css", "fonts/*"]
+    },
+    "highlight.js": {
+      "main": ["*.js", "**/*.css"]
     },
     "respond-minmax": {
       "main": "dest/*.min.js"
