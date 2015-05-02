@@ -14,16 +14,6 @@ cache:
   - website/node_modules
   - website/bower_components
 install:
-- cd website && npm install && cd ..
+- [ "$TEST_TARGET" = "website" ] && cd website && npm install && cd ..
 script:
-- |
-  if [ $TEST_TARGET = android ]; then
-    # This should be replaced to "./gradlew assmble" or something like that
-    echo "Building..."
-  elif [ $TEST_TARGET = website ]; then
-    if [ $TRAVIS_PULL_REQUEST != "false" -a $TRAVIS_BRANCH = "master" ]; then
-      pushd website
-      [ $GH_TOKEN ] && npm run deploy
-      popd
-    fi
-  fi
+- /bin/bash .travis-script.sh
