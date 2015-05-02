@@ -22,7 +22,7 @@ if (process.env.GH_TOKEN) {
     // Local
     var gitBaseUrl = 'github.com:' + project.githubRepoOwner + '/' + project.name + '.git';
     project['gitUrl'] = 'git@' + gitBaseUrl;
-    project['gitPushUrl'] = project['gitUrl'];
+    project['gitPushUrl'] = 'origin';
 }
 
 var paths = {
@@ -104,9 +104,10 @@ gulp.task('deploy', ['git-clone'], function(cb) {
                             gulp.src(paths.repo)
                                 .pipe(git.add({args: '-A', cwd: paths.repo}))
                                 .pipe(git.commit('Updated website.', {cwd: paths.repo}))
-                                .on('finish', function() {
+                                .on('end', function() {
                                     gutil.log('finish');
-                                    git.push(project.gitPushUrl, 'gh-pages', {args: '--quiet', quiet: true, cwd: paths.repo}, function(err) {
+                                    gutil.log('git push ' + project.gitPushUrl + ' gh-pages --quiet');
+                                    git.push(project.gitPushUrl, 'gh-pages', {args: '--quiet', /*quiet: true, */cwd: paths.repo}, function(err) {
                                         if (err) {
                                             gutil.log('Failed to push: ' + err);
                                             throw err;
