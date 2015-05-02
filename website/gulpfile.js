@@ -9,10 +9,20 @@ var ghToken = process.env.GH_TOKEN;
 
 // You should replace this configs to your project's values.
 var project = {
+    githubRepoOwner: 'ksoichiro',
     name: 'gh-pages-android-playground',
-    gitUrl: 'https://github.com/ksoichiro/gh-pages-android-playground.git',
-    gitPushUrl: 'https://' + ghToken + '@github.com/ksoichiro/gh-pages-android-playground.git'
 };
+
+var gitBaseUrl = 'github.com/' + project.githubRepoOwner + '/' + project.name + '.git';
+if (process.env.GH_TOKEN) {
+    // Travis CI
+    project['gitUrl'] = 'https://' + gitBaseUrl;
+    project['gitPushUrl'] = 'https://' + ghToken + '@' + gitBaseUrl;
+} else {
+    // Local
+    project['gitUrl'] = 'git@' + gitBaseUrl;
+    project['gitPushUrl'] = project['gitUrl'];
+}
 
 var paths = {
     bower: "./bower_components",
