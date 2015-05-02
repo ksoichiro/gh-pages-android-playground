@@ -17,16 +17,12 @@ cache:
   - $HOME/.gradle/wrapper/dists
 before_cache:
   - for i in $(find $HOME/.gradle/caches -name "*.lock"); do rm -f ${i}; done
-android:
-  components:
-    - build-tools-22.0.1
-    - tools
-    - android-22
-    - extra-android-support
-    - extra-android-m2repository
-  licenses:
-    - 'android-sdk-license-.+'
 install:
 - true && ([ "$TEST_TARGET" != "website" ] || (cd website && npm install && cd ..))
+- true && ([ "$TEST_TARGET" != "android" ] || android-update-sdk --components=build-tools-22.0.1 --accept-licenses='android-sdk-license-.+')
+- true && ([ "$TEST_TARGET" != "android" ] || android-update-sdk --components=tools --accept-licenses='android-sdk-license-.+')
+- true && ([ "$TEST_TARGET" != "android" ] || android-update-sdk --components=android-22 --accept-licenses='android-sdk-license-.+')
+- true && ([ "$TEST_TARGET" != "android" ] || android-update-sdk --components=extra-android-support --accept-licenses='android-sdk-license-.+')
+- true && ([ "$TEST_TARGET" != "android" ] || android-update-sdk --components=extra-android-m2repository --accept-licenses='android-sdk-license-.+')
 script:
 - "/bin/bash .travis-script.sh"
