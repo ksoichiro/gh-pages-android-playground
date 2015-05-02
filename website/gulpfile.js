@@ -65,15 +65,20 @@ gulp.task('git-clone', ['remove-repo'], function(cb) {
 
 gulp.task('deploy', ['git-clone'], function(cb) {
     gutil.log('check out gh-pages...');
-    git.checkout('gh-pages', {args: '-b', cwd: paths.repo}, function(err) {
-        gutil.log('copying files...');
-        gulp.src(paths.harp.output + '/**')
-            .pipe(gulp.dest(paths.repo))
-            .pipe(git.add({args: '-A', cwd: paths.repo}))
-            .pipe(git.commit('Updated website.', {cwd: paths.repo}));
-        //git.push();
-        gutil.log('done');
-        cb();
+    git.checkout('origin/gh-pages', {args: '-b gh-pages', cwd: paths.repo}, function(err) {
+        if (err) {
+            gutil.log('Failed to check out branch: ' + err);
+        } else {
+            gutil.log('copying files...');
+            gulp.src(paths.harp.output + '/**')
+                .pipe(gulp.dest(paths.repo))
+                .pipe(git.add({args: '-A', cwd: paths.repo}))
+                .pipe(git.commit('Updated website.', {cwd: paths.repo}));
+            git.push('origin', 'gh-pages', function(err) {
+                cb();
+                gutil.log('done');
+            });
+        }
     });
 });
 
