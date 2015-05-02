@@ -36,7 +36,7 @@ gulp.task('clean', function(cb) {
 gulp.task('build', ['copy'], function(cb) {
     // This task is for production, so BASE_URL should be a project name.
     // $BASE_URL is referenced in harp.json, and it will be replaced by harp (envy).
-    process.env.BASE_URL = project.name
+    process.env.BASE_URL = '/' + project.name
     harp.compile(paths.harp.project, paths.harp.output, function(err) {
         if (err) {
             gutil.log('build failed: ' + err);
