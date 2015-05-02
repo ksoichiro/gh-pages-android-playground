@@ -6,7 +6,7 @@ var del = require('del');
 var gutil = require('gulp-util');
 
 // You should replace this configs to your project's values.
-var project {
+var project = {
     name: 'gh-pages-android-playground',
     gitUrl: 'https://github.com/ksoichiro/gh-pages-android-playground.git'
 };
