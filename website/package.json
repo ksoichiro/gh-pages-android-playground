@@ -22,7 +22,6 @@
     "copy": "gulp copy",
     "build": "gulp build",
     "deploy": "gulp deploy",
-    "check": "gulp check",
     "clean": "gulp clean"
   }
 }
