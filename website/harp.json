@@ -1,2 +1,6 @@
 {
+  "globals": {
+    "baseUrl": "$BASE_URL",
+    "title": "gh-pages-android-playground"
+  }
 }

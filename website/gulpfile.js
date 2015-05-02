@@ -5,6 +5,12 @@ var harp = require('harp');
 var del = require('del');
 var gutil = require('gulp-util');
 
+// You should replace this configs to your project's values.
+var project {
+    name: 'gh-pages-android-playground',
+    gitUrl: 'https://github.com/ksoichiro/gh-pages-android-playground.git'
+};
+
 var paths = {
     bower: "./bower_components",
     harp: {
@@ -17,6 +23,7 @@ var paths = {
     },
     repo: "repo"
 };
+
 var port = 9000;
 
 gulp.task('clean', function(cb) {
@@ -24,6 +31,9 @@ gulp.task('clean', function(cb) {
 });
 
 gulp.task('build', ['copy'], function(cb) {
+    // This task is for production, so BASE_URL should be a project name.
+    // $BASE_URL is referenced in harp.json, and it will be replaced by harp (envy).
+    process.env.BASE_URL = project.name
     harp.compile(paths.harp.project, paths.harp.output, function(err) {
         if (err) {
             gutil.log('build failed: ' + err);
@@ -47,7 +57,7 @@ gulp.task('remove-repo', ['build'], function(cb) {
 
 gulp.task('git-clone', ['remove-repo'], function(cb) {
     // Clone to build directory, commit files to gh-pages branch, and push it.
-    git.clone('https://github.com/ksoichiro/gh-pages-android-playground.git', {args: paths.repo}, function(err) {
+    git.clone(project.gitUrl, {args: paths.repo}, function(err) {
         gutil.log('clone done');
         cb();
     });
@@ -67,7 +77,10 @@ gulp.task('deploy', ['git-clone'], function(cb) {
     });
 });
 
-gulp.task('start', ['build'], function() {
+gulp.task('start', ['copy'], function() {
+    // This task is for development locally, so BASE_URL should be empty.
+    // $BASE_URL is referenced in harp.json, and it will be replaced by harp (envy).
+    process.env.BASE_URL = ''
     harp.server(paths.harp.project, { port: port }, function(err) {
         if (err) {
             gutil.log('Failed to start');
