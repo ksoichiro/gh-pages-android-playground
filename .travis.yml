@@ -7,7 +7,7 @@ env:
   - GIT_AUTHOR_EMAIL=soichiro.kashima@gmail.com
   - secure: Tszvcrpj37Y2/iLG2ke42Zl/lOzwi21IfRafmnyoAqSWycwuEwFzp4wjHNUZEEVVdiAU5my2CfVhcPakF3bdcFt9Dg1lUP8SSuMgrUurGD95wfJ2ORNU1B+3GElKItO8yKjG1eruDNzgOCwX1VocSnCXZbHeg3p1mhE5UEIht+w=
 install:
-- cd website && npm install
+- cd website && npm install && cd ..
 script:
 - |
   # This should be replaced to "./gradlew assmble" or something like that
