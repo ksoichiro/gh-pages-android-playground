@@ -6,6 +6,9 @@ env:
   - GIT_AUTHOR_NAME=ksoichiro
   - GIT_AUTHOR_EMAIL=soichiro.kashima@gmail.com
   - secure: Tszvcrpj37Y2/iLG2ke42Zl/lOzwi21IfRafmnyoAqSWycwuEwFzp4wjHNUZEEVVdiAU5my2CfVhcPakF3bdcFt9Dg1lUP8SSuMgrUurGD95wfJ2ORNU1B+3GElKItO8yKjG1eruDNzgOCwX1VocSnCXZbHeg3p1mhE5UEIht+w=
+  matrix:
+  - TEST_TARGET=android
+  - TEST_TARGET=website
 cache:
   directories:
   - website/node_modules
@@ -14,8 +17,13 @@ install:
 - cd website && npm install && cd ..
 script:
 - |
-  # This should be replaced to "./gradlew assmble" or something like that
-  echo "Building at `pwd`..."
-  cd website
-  # TODO Avoid building on pull requests
-  [ $GH_TOKEN ] && npm run deploy
+  if [ $TEST_TARGET = android ]; then
+    # This should be replaced to "./gradlew assmble" or something like that
+    echo "Building..."
+  elif [ $TEST_TARGET = website ]; then
+    if [ $TRAVIS_PULL_REQUEST != "false" -a $TRAVIS_BRANCH = "master" ]; then
+      pushd website
+      [ $GH_TOKEN ] && npm run deploy
+      popd
+    fi
+  fi
