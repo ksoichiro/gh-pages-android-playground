@@ -91,15 +91,26 @@ gulp.task('deploy', ['git-clone'], function(cb) {
             gulp.src(paths.harp.output + '/**')
                 .pipe(gulp.dest(paths.repo))
                 .pipe(git.add({args: '-A', cwd: paths.repo}))
-                .pipe(git.commit('Updated website.', {cwd: paths.repo}));
-            git.push(project.gitPushUrl, 'gh-pages', {args: '--quiet', cwd: paths.repo}, function(err) {
-                if (err) {
-                    gutil.log('Failed to push: ' + err);
-                } else {
-                    gutil.log('Pushed successfully.');
-                }
-                cb();
-            });
+                .pipe(git.exec({args : 'diff-index --quiet HEAD --', cwd: paths.repo}, function (err, stdout) {
+                    gutil.log('exec git diff-index: ' + err);
+                    if (err) {
+                        // There are some changes for gh-pages
+                        gutil.log('There are some changes to commit.');
+                        gulp.src(paths.harp.output + '/**')
+                            .pipe(git.commit('Updated website.', {cwd: paths.repo}));
+                        git.push(project.gitPushUrl, 'gh-pages', {args: '--quiet', cwd: paths.repo}, function(err) {
+                            if (err) {
+                                gutil.log('Failed to push: ' + err);
+                            } else {
+                                gutil.log('Pushed successfully.');
+                            }
+                            cb();
+                        });
+                    } else {
+                        gutil.log('Nothing to commit.');
+                        cb();
+                    }
+                }));
         }
     });
 });
