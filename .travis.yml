@@ -13,6 +13,7 @@ cache:
   directories:
   - website/node_modules
   - website/bower_components
+  - $HOME/.gradle/caches
 android:
   components:
     - build-tools-22.0.1
