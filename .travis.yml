@@ -13,6 +13,15 @@ cache:
   directories:
   - website/node_modules
   - website/bower_components
+android:
+  components:
+    - build-tools-22.0.1
+    - tools
+    - android-22
+    - extra-android-support
+    - extra-android-m2repository
+  licenses:
+    - 'android-sdk-license-.+'
 install:
 - true && ([ "$TEST_TARGET" != "website" ] || (cd website && npm install && cd ..))
 script:

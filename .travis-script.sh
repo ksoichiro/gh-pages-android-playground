@@ -5,8 +5,7 @@ echo "TRAVIS_PULL_REQUEST=${TRAVIS_PULL_REQUEST}"
 echo "TRAVIS_BRANCH=${TRAVIS_BRANCH}"
 
 if [ "$TEST_TARGET" = "android" ]; then
-  # This should be replaced to "./gradlew assmble" or something like that
-  echo "Building..."
+  ./gradlew --full-stacktrace assemble
 elif [ "$TEST_TARGET" = "website" ]; then
   if [ "$TRAVIS_PULL_REQUEST" = "false" ] && [ "$TRAVIS_BRANCH" = "master" ] && [ ! -z "$GH_TOKEN" ]; then
     echo "Update website..."
